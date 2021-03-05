@@ -534,6 +534,7 @@ func TestPodTemplateConfig(t *testing.T) {
 	}
 	priorityClassName := "foo"
 	serviceAccountName := "thanos-ruler-sa"
+	dnsConfig := v1.PodDNSConfig{}
 
 	sset, err := makeStatefulSet(&monitoringv1.ThanosRuler{
 		ObjectMeta: metav1.ObjectMeta{},
@@ -545,6 +546,7 @@ func TestPodTemplateConfig(t *testing.T) {
 			SecurityContext:    &securityContext,
 			PriorityClassName:  priorityClassName,
 			ServiceAccountName: serviceAccountName,
+			DNSConfig:          &dnsConfig,
 		},
 	}, defaultTestConfig, nil, "")
 	if err != nil {
@@ -568,6 +570,9 @@ func TestPodTemplateConfig(t *testing.T) {
 	}
 	if sset.Spec.Template.Spec.ServiceAccountName != serviceAccountName {
 		t.Fatalf("expected service account name to match, want %s, got %s", serviceAccountName, sset.Spec.Template.Spec.ServiceAccountName)
+	}
+	if !reflect.DeepEqual(*sset.Spec.Template.Spec.DNSConfig, dnsConfig) {
+		t.Fatalf("expected dns configuration to match, want %v, got %v", dnsConfig, *sset.Spec.Template.Spec.DNSConfig)
 	}
 }
 
