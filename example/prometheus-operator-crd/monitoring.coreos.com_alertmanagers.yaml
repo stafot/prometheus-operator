@@ -1215,6 +1215,9 @@ spec:
                       type: string
                     type: array
                 type: object
+              dnsPolicy:
+                description: DNS custom policy to use for an Alertmanager pod.
+                type: string
               externalUrl:
                 description: The external URL the Alertmanager instances will be available under. This is necessary to generate correct URLs. This is necessary if Alertmanager is not served from root of a DNS name.
                 type: string
